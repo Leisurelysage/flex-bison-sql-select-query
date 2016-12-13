@@ -17,6 +17,7 @@ WHERE (?i:("WHERE"))
 OR (?:or)
 AND (?:and)
 ALL "*"
+END_QUERY ";"
 %{
   #include <stdlib.h>
   #include <stdio.h>
@@ -26,6 +27,7 @@ ALL "*"
   int line = 1;
 %}
 %%
+{END_QUERY}     { position += yyleng; printf("END_QUERY ");     return(END_QUERY); }
 {OR}            { position += yyleng; printf("OR ");            return(OR); }
 {AND}           { position += yyleng; printf("AND ");           return(AND); }
 {ALL}           { position += yyleng; printf("ALL ");           return(ALL); }
@@ -40,9 +42,9 @@ ALL "*"
 {DISTINCTALL}   { position += yyleng; printf("DISTINCTALL ");   return(DISTINCTALL); }
 {FROM}          { position += yyleng; printf("FROM ");          return(FROM); }
 {WHERE}         { position += yyleng; printf("WHERE ");         return(WHERE); }
-{IDENT}            { position += yyleng; printf("IDENT ");            return(IDENT); }
+{IDENT}         { position += yyleng; printf("IDENT ");         return(IDENT); }
 [ \t] ;
-[\r\n]          { line++; printf("\n");}
+[\r\n]          { line++; position=0; printf("\n");}
 %%
 int yywrap(void)
 {

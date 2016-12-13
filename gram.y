@@ -13,6 +13,7 @@
 %token OR
 %token AND
 %token ALL
+%token END_QUERY
 %{
   #include <stdio.h>
   int yylex(void);
@@ -22,17 +23,17 @@
 %}
 %%
 select_statement:
-  SELECT fields_list from_clause where_clause
-  | SELECT fields_list from_clause
-  | error fields_list from_clause where_clause { yyerror(" Missed 'SELECT'! ");};
+  SELECT fields_list from_clause END_QUERY
+  | SELECT fields_list from_clause where_clause END_QUERY
+  | error fields_list from_clause where_clause END_QUERY { yyerror("missed SELECT");};
 
 where_clause:
   WHERE condition
-  |error condition { yyerror(" Missed 'WHERE'! "); };
+  |error condition { yyerror("missed WHERE"); };
 
 from_clause:
   FROM list
-  | FROM error { yyerror("Missed id!"); };
+  | FROM error { yyerror("missed ident"); };
 
 condition:
   condition1
@@ -53,10 +54,10 @@ condition1:
 
 condition2:
   IDENT COMPARISON value_field
-  | IDENT error value_field { yyerror(" No comparison operation! "); }
-  | IDENT COMPARISON error { yyerror(" No value on the right! ");}
-  | error COMPARISON value_field { yyerror(" No identifier on the left! "); }
-  | error { yyerror(" Missed condition! "); };
+  | IDENT error value_field { yyerror("no comparison operation "); }
+  | IDENT COMPARISON error { yyerror("no value on the right in comparison");}
+  | error COMPARISON value_field { yyerror("no identifier on the left in comparison"); }
+  | error { yyerror("missed condition"); };
 value_field:
   STRING
   | NUMBER;
