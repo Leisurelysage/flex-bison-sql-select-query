@@ -7,7 +7,7 @@ NUMBER [-]?({NUM}*)
 PUNCTIATION ("."|"?"|"!"|{COMMA})
 SYMBOL {LETTER}|{NUM}|{PUNCTIATION}
 STRING ["]{SYMBOL}*["]
-ID ({LETTER}|_)({LETTER}|_|{NUMBER})*
+IDENT ({LETTER}|_)({LETTER}|_|{NUMBER})*
 COMPARISON "="|"<>"|"<"|">"|"<="|">="
 NOT (?i:("NOT"))
 SELECT (?i:("SELECT"))
@@ -40,7 +40,7 @@ ALL "*"
 {DISTINCTALL}   { position += yyleng; printf("DISTINCTALL ");   return(DISTINCTALL); }
 {FROM}          { position += yyleng; printf("FROM ");          return(FROM); }
 {WHERE}         { position += yyleng; printf("WHERE ");         return(WHERE); }
-{ID}            { position += yyleng; printf("ID ");            return(ID); }
+{IDENT}            { position += yyleng; printf("IDENT ");            return(IDENT); }
 [ \t] ;
 [\r\n]          { line++; printf("\n");}
 %%

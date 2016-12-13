@@ -9,7 +9,7 @@
 %token DISTINCTALL
 %token FROM
 %token WHERE
-%token ID
+%token IDENT
 %token OR
 %token AND
 %token ALL
@@ -44,17 +44,17 @@ fields_list:
   | list;
 
 list:
-  ID
-  | list COMMA ID;
+  IDENT
+  | list COMMA IDENT;
 
 condition1:
   condition2
   | NOT condition2;
 
 condition2:
-  ID COMPARISON value_field
-  | ID error value_field { yyerror(" No comparison operation! "); }
-  | ID COMPARISON error { yyerror(" No value on the right! ");}
+  IDENT COMPARISON value_field
+  | IDENT error value_field { yyerror(" No comparison operation! "); }
+  | IDENT COMPARISON error { yyerror(" No value on the right! ");}
   | error COMPARISON value_field { yyerror(" No identifier on the left! "); }
   | error { yyerror(" Missed condition! "); };
 value_field:
